@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Virtual Lab Simulator</title>
+
+    <!-- ✅ Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- ✅ Font Awesome for Icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  </head>
+  <!-- Top Navbar -->
+  <header class="bg-gradient-to-r from-lilac-200 to-purple-300 text-gray-800 shadow-md w-full px-6 py-4 fixed top-0 left-0 z-50">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <!-- Logo / Brand (Moved to the left) -->
+      <div class="flex items-center space-x-2">
+        <span class="font-bold text-xl text-purple-900">Priyanshu's Virtual Lab</span>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="hidden md:flex space-x-6 text-sm font-medium">
+        <a href="#" class="hover:text-purple-600 transition">Curriculum</a>
+        <a href="#" class="hover:text-purple-600 transition">Library</a>
+        <a href="#" class="hover:text-purple-600 transition">Subjects</a>
+      </nav>
+
+      <!-- Auth Buttons (Moved to the right) -->
+      <div class="flex space-x-4">
+        <button class="text-sm font-semibold text-purple-900 hover:text-purple-700 transition">Log in</button>
+        <button class="bg-purple-600 text-white text-sm px-4 py-2 rounded-xl hover:bg-purple-700 transition">Sign up</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Spacing so content isn't hidden under fixed navbar -->
+  <div class="h-20"></div>
+
+  <body class="bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 min-h-screen flex flex-col items-center justify-center text-center p-6">
+
+    <!-- Hero Section -->
+    <div class="space-y-8 max-w-5xl mx-auto text-center">
+      <h1 class="text-5xl font-extrabold text-purple-800 drop-shadow-lg">
+        Welcome to the Virtual Science Lab!
+        <i class="fas fa-star text-yellow-500 ml-2"></i>
+      </h1>
+      <p class="text-lg text-gray-700 max-w-xl mx-auto mt-4">
+        Explore the fascinating worlds of
+        <span class="font-semibold text-blue-600">Physics</span>,
+        <span class="font-semibold text-red-500">Chemistry</span>, and
+        <span class="font-semibold text-green-600">Biology</span> with engaging, interactive experiments.
+      </p>
+      <div class="mt-8">
+        <button class="bg-purple-600 hover:bg-purple-700 text-white text-lg px-8 py-4 rounded-3xl shadow-xl transform hover:scale-110 transition duration-300">
+          Explore Labs
+        </button>
+      </div>
+    </div>
+
+    <!-- Visuals Section -->
+    <div class="mt-16 max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12">
+      <!-- Physics Card -->
+      <a href="physics.html" class="bg-white rounded-2xl shadow-lg p-6 text-center space-y-4 border-t-4 border-transparent hover:border-indigo-400 transition transform hover:scale-105 block">
+        <img src="./assets/icons/physics.png" alt="Physics Icon" class="mx-auto mb-4 w-16 h-16"/>
+        <h2 class="text-xl font-bold text-gray-800">Physics</h2>
+        <p class="text-gray-600 text-sm">Dive into the world of forces, energy, and motion.</p>
+      </a>
+
+      <!-- Chemistry Card -->
+      <a href="chemistry.html" class="bg-white rounded-2xl shadow-lg p-6 text-center space-y-4 border-t-4 border-transparent hover:border-red-400 transition transform hover:scale-105 block">
+        <img src="./assets/icons/chemistry-class.png" alt="Chemistry Icon" class="mx-auto mb-4 w-16 h-16"/>
+        <h2 class="text-xl font-bold text-gray-800">Chemistry</h2>
+        <p class="text-gray-600 text-sm">Mix elements, watch reactions, and explore compounds.</p>
+      </a>
+
+      <!-- Biology Card -->
+      <a href="biology.html" class="bg-white rounded-2xl shadow-lg p-6 text-center space-y-4 border-t-4 border-transparent hover:border-green-400 transition transform hover:scale-105 block">
+        <img src="./assets/icons/biology.png" alt="Biology Icon" class="mx-auto mb-4 w-16 h-16"/>
+        <h2 class="text-xl font-bold text-gray-800">Biology</h2>
+        <p class="text-gray-600 text-sm">Explore cells, organisms, and the diversity of life.</p>
+      </a>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="mt-16 text-center text-gray-500 text-sm">
+      <p>© 2025 Virtual Science Lab | All Rights Reserved</p>
+    </footer>
+
+  </body>
+</html>

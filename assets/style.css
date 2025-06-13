@@ -1,0 +1,213 @@
+/* === General === */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  background: linear-gradient(to right, #f3e5f5, #e3f2fd);
+  min-height: 100vh;
+  color: #222;
+}
+
+/* === Navbar === */
+nav {
+  width: 100%;
+  height: 5rem;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  padding: 1rem 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  gap: 0.5rem;
+}
+
+nav a {
+  text-decoration: none;
+  color: #7c3aed;
+  font-weight: 500;
+  margin: 0 0.5rem;
+  transition: color 0.2s;
+}
+
+nav a.active, nav a.underline {
+  color: #00695c;
+  text-decoration: underline;
+  font-weight: 700;
+}
+
+nav a:hover {
+  color: #4a148c;
+}
+
+.nav-left,
+.nav-right {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* === Main Content === */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 7rem;
+  padding-bottom: 2rem;
+}
+
+/* === Headings === */
+h1 {
+  color: #4a148c;
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  text-shadow: 0 2px 8px #e0e0e0;
+}
+
+h2 {
+  color: #00695c;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+/* === Divider === */
+.divider {
+  height: 4px;
+  width: 80px;
+  background: #80deea;
+  margin: 0 auto 2rem auto;
+  border-radius: 2px;
+}
+
+/* === Grid & Cards === */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, background 0.2s;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  background-color: #fce4ec;
+}
+
+.card img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+}
+
+.card h3 {
+  font-size: 1.1rem;
+  color: #00695c;
+  margin: 0;
+}
+
+/* === Sim Container (for iframe-based labs) === */
+.sim-container {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 18px rgba(44, 62, 80, 0.10);
+  padding: 2rem;
+  border: 1px solid #c8e6c9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 950px;
+  width: 100%;
+}
+
+iframe {
+  width: 100%;
+  max-width: 900px;
+  height: 600px;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.note {
+  margin-top: 1.5rem;
+  color: #388e3c;
+  font-size: 1rem;
+  text-align: center;
+}
+
+/* === Footer === */
+footer {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  padding: 1rem 0;
+  color: #888;
+  font-size: 0.95rem;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.04);
+  margin-top: 2rem;
+}
+
+/* === Responsive === */
+@media (max-width: 700px) {
+  nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-left,
+  .nav-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .main-content {
+    padding-top: 8rem;
+    padding-bottom: 1rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  .grid {
+    gap: 1rem;
+    padding: 0 0.5rem;
+  }
+
+  .card {
+    padding: 1rem;
+  }
+
+  .sim-container {
+    padding: 1rem;
+  }
+
+  iframe {
+    height: 350px;
+    max-width: 100%;
+  }
+}

@@ -1,0 +1,38 @@
+<!-- about.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About | Virtual Science Lab</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <div id="navbar"></div>
+  <div class="main-content">
+    <h1>About Virtual Science Lab</h1>
+    <div class="divider"></div>
+    <div style="max-width:700px;margin:0 auto;font-size:1.15rem;color:#444;">
+      <p>
+        <strong>Priyanshu's Virtual Science Lab</strong> is an interactive platform designed to make science learning fun, accessible, and hands-on for everyone. Our virtual labs cover <b>Physics</b>, <b>Chemistry</b>, and <b>Biology</b>—allowing students and enthusiasts to explore experiments, simulations, and concepts from anywhere.
+      </p>
+      <p>
+        Whether you're a student, teacher, or lifelong learner, our goal is to provide a safe, engaging, and modern environment for scientific discovery. All labs are browser-based and require no special software.
+      </p>
+      <ul style="margin:1.5rem 0 0 1.5rem;">
+        <li>🌟 Interactive simulations and visualizations</li>
+        <li>🌟 Curriculum-aligned content</li>
+        <li>🌟 Free and open for all learners</li>
+      </ul>
+      <p style="margin-top:1.5rem;">
+        <b>Have feedback or want to contribute?</b> Reach out via our <a href="contact.html" style="color:#7c3aed;text-decoration:underline;">Contact page</a>!
+      </p>
+    </div>
+  </div>
+  <div id="footer"></div>
+  <script>
+    fetch('navbar.html').then(r => r.text()).then(t => document.getElementById('navbar').innerHTML = t);
+    fetch('footer.html').then(r => r.text()).then(t => document.getElementById('footer').innerHTML = t);
+  </script>
+</body>
+</html>

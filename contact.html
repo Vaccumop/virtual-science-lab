@@ -1,0 +1,33 @@
+<!-- contact.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact | Virtual Science Lab</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <div id="navbar"></div>
+  <div class="main-content">
+    <h1>Contact Us</h1>
+    <div class="divider"></div>
+    <div style="max-width:600px;margin:0 auto;font-size:1.1rem;color:#444;">
+      <p>
+        Have a question, suggestion, or want to collaborate? Fill out the form below or email us at <a href="mailto:priyanshu.virtual.lab@gmail.com" style="color:#7c3aed;text-decoration:underline;">priyanshu.virtual.lab@gmail.com</a>
+      </p>
+      <form style="margin-top:2rem;display:flex;flex-direction:column;gap:1rem;" action="mailto:priyanshu.virtual.lab@gmail.com" method="POST" enctype="text/plain">
+        <input type="text" name="name" placeholder="Your Name" required style="padding:0.7rem;border-radius:8px;border:1px solid #ccc;">
+        <input type="email" name="email" placeholder="Your Email" required style="padding:0.7rem;border-radius:8px;border:1px solid #ccc;">
+        <textarea name="message" placeholder="Your Message" rows="5" required style="padding:0.7rem;border-radius:8px;border:1px solid #ccc;"></textarea>
+        <button type="submit" style="background:#7c3aed;color:#fff;padding:0.8rem 2rem;border:none;border-radius:8px;font-weight:600;cursor:pointer;">Send Message</button>
+      </form>
+    </div>
+  </div>
+  <div id="footer"></div>
+  <script>
+    fetch('navbar.html').then(r => r.text()).then(t => document.getElementById('navbar').innerHTML = t);
+    fetch('footer.html').then(r => r.text()).then(t => document.getElementById('footer').innerHTML = t);
+  </script>
+</body>
+</html>

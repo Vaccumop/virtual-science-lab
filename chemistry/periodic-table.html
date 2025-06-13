@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Periodic Table Explorer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #e3f2fd, #fce4ec);
+      padding: 2rem;
+      text-align: center;
+    }
+    .periodic-table {
+      display: grid;
+      grid-template-columns: repeat(18, 2.8rem);
+      gap: 4px;
+      max-width: 54rem;
+      margin: 0 auto;
+      justify-content: center;
+    }
+    .element {
+      padding: 0.3rem 0.1rem 0.1rem 0.1rem;
+      background: #bbdefb;
+      border: 1px solid #90caf9;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s;
+      min-height: 2.8rem;
+      min-width: 2.8rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      font-size: 1rem;
+      position: relative;
+    }
+    .element .number {
+      font-size: 0.7rem;
+      color: #607d8b;
+      position: absolute;
+      top: 0.2rem;
+      left: 0.3rem;
+    }
+    .element .symbol {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-top: 0.5rem;
+      color: #1565c0;
+    }
+    .element .name {
+      font-size: 0.7rem;
+      color: #333;
+      margin-top: 0.1rem;
+    }
+    .element:hover {
+      transform: scale(1.08);
+      background: #64b5f6;
+      color: white;
+      z-index: 2;
+    }
+    .empty {
+      background: transparent !important;
+      border: none !important;
+      cursor: default !important;
+      pointer-events: none;
+    }
+    .info-pop {
+      display: none;
+      position: absolute;
+      z-index: 10;
+      left: 50%;
+      transform: translateX(-50%);
+      top: -7.5rem;
+      background: white;
+      padding: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.15);
+      min-width: 180px;
+      max-width: 250px;
+      pointer-events: none;
+    }
+    .element:hover .info-pop,
+    .element:focus-within .info-pop {
+      display: block;
+    }
+    @media (max-width: 900px) {
+      .periodic-table {
+        grid-template-columns: repeat(18, 2rem);
+        max-width: 36rem;
+      }
+      .element, .empty {
+        min-width: 2rem;
+        min-height: 2rem;
+        font-size: 0.8rem;
+      }
+      .info-pop {
+        min-width: 120px;
+        font-size: 0.8rem;
+        top: -6.5rem;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-blue-100 via-white to-pink-100 min-h-screen flex flex-col font-sans">
+
+  <!-- Navigation Bar -->
+  <nav class="w-full bg-white/80 shadow-md py-4 px-8 flex justify-between items-center fixed top-0 left-0 z-10">
+    <a href="/index.html" class="text-2xl font-bold text-blue-700 hover:text-blue-900 transition">Virtual Science Lab</a>
+    <div>
+      <a href="/index.html" class="text-blue-600 hover:text-blue-900 font-medium px-4">Home</a>
+      <a href="/chemistry/periodic-table.html" class="text-pink-900 font-semibold px-4 underline">Periodic Table</a>
+      <!-- Add more nav links as needed -->
+    </div>
+  </nav>
+
+  <div class="flex-1 flex flex-col items-center justify-center pt-24 pb-8">
+    <header class="w-full max-w-3xl mx-auto mb-6">
+      <h1 class="text-4xl font-extrabold text-center text-blue-900 drop-shadow mb-2">
+        🧪 Periodic Table Explorer
+      </h1>
+      <div class="h-1 w-24 bg-pink-400 mx-auto rounded"></div>
+    </header>
+
+    <main class="w-full max-w-6xl bg-white/95 rounded-3xl shadow-2xl p-8 flex flex-col items-center border border-pink-100">
+      <div class="periodic-table" id="table"></div>
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer class="w-full bg-white/80 text-center py-4 text-gray-500 text-sm shadow-inner mt-8">
+    &copy; 2025 Virtual Science Lab. All rights reserved.
+  </footer>
+
+  <script>
+    // All 118 elements with position (period, group)
+    const elements = [
+      {number:1, symbol:'H', name:'Hydrogen', group:1, period:1},
+      {number:2, symbol:'He', name:'Helium', group:18, period:1},
+      {number:3, symbol:'Li', name:'Lithium', group:1, period:2},
+      {number:4, symbol:'Be', name:'Beryllium', group:2, period:2},
+      {number:5, symbol:'B', name:'Boron', group:13, period:2},
+      {number:6, symbol:'C', name:'Carbon', group:14, period:2},
+      {number:7, symbol:'N', name:'Nitrogen', group:15, period:2},
+      {number:8, symbol:'O', name:'Oxygen', group:16, period:2},
+      {number:9, symbol:'F', name:'Fluorine', group:17, period:2},
+      {number:10, symbol:'Ne', name:'Neon', group:18, period:2},
+      {number:11, symbol:'Na', name:'Sodium', group:1, period:3},
+      {number:12, symbol:'Mg', name:'Magnesium', group:2, period:3},
+      {number:13, symbol:'Al', name:'Aluminum', group:13, period:3},
+      {number:14, symbol:'Si', name:'Silicon', group:14, period:3},
+      {number:15, symbol:'P', name:'Phosphorus', group:15, period:3},
+      {number:16, symbol:'S', name:'Sulfur', group:16, period:3},
+      {number:17, symbol:'Cl', name:'Chlorine', group:17, period:3},
+      {number:18, symbol:'Ar', name:'Argon', group:18, period:3},
+      {number:19, symbol:'K', name:'Potassium', group:1, period:4},
+      {number:20, symbol:'Ca', name:'Calcium', group:2, period:4},
+      {number:21, symbol:'Sc', name:'Scandium', group:3, period:4},
+      {number:22, symbol:'Ti', name:'Titanium', group:4, period:4},
+      {number:23, symbol:'V', name:'Vanadium', group:5, period:4},
+      {number:24, symbol:'Cr', name:'Chromium', group:6, period:4},
+      {number:25, symbol:'Mn', name:'Manganese', group:7, period:4},
+      {number:26, symbol:'Fe', name:'Iron', group:8, period:4},
+      {number:27, symbol:'Co', name:'Cobalt', group:9, period:4},
+      {number:28, symbol:'Ni', name:'Nickel', group:10, period:4},
+      {number:29, symbol:'Cu', name:'Copper', group:11, period:4},
+      {number:30, symbol:'Zn', name:'Zinc', group:12, period:4},
+      {number:31, symbol:'Ga', name:'Gallium', group:13, period:4},
+      {number:32, symbol:'Ge', name:'Germanium', group:14, period:4},
+      {number:33, symbol:'As', name:'Arsenic', group:15, period:4},
+      {number:34, symbol:'Se', name:'Selenium', group:16, period:4},
+      {number:35, symbol:'Br', name:'Bromine', group:17, period:4},
+      {number:36, symbol:'Kr', name:'Krypton', group:18, period:4},
+      {number:37, symbol:'Rb', name:'Rubidium', group:1, period:5},
+      {number:38, symbol:'Sr', name:'Strontium', group:2, period:5},
+      {number:39, symbol:'Y', name:'Yttrium', group:3, period:5},
+      {number:40, symbol:'Zr', name:'Zirconium', group:4, period:5},
+      {number:41, symbol:'Nb', name:'Niobium', group:5, period:5},
+      {number:42, symbol:'Mo', name:'Molybdenum', group:6, period:5},
+      {number:43, symbol:'Tc', name:'Technetium', group:7, period:5},
+      {number:44, symbol:'Ru', name:'Ruthenium', group:8, period:5},
+      {number:45, symbol:'Rh', name:'Rhodium', group:9, period:5},
+      {number:46, symbol:'Pd', name:'Palladium', group:10, period:5},
+      {number:47, symbol:'Ag', name:'Silver', group:11, period:5},
+      {number:48, symbol:'Cd', name:'Cadmium', group:12, period:5},
+      {number:49, symbol:'In', name:'Indium', group:13, period:5},
+      {number:50, symbol:'Sn', name:'Tin', group:14, period:5},
+      {number:51, symbol:'Sb', name:'Antimony', group:15, period:5},
+      {number:52, symbol:'Te', name:'Tellurium', group:16, period:5},
+      {number:53, symbol:'I', name:'Iodine', group:17, period:5},
+      {number:54, symbol:'Xe', name:'Xenon', group:18, period:5},
+      {number:55, symbol:'Cs', name:'Cesium', group:1, period:6},
+      {number:56, symbol:'Ba', name:'Barium', group:2, period:6},
+      {number:57, symbol:'La', name:'Lanthanum', group:3, period:6},
+      {number:58, symbol:'Ce', name:'Cerium', group:4, period:8},
+      {number:59, symbol:'Pr', name:'Praseodymium', group:5, period:8},
+      {number:60, symbol:'Nd', name:'Neodymium', group:6, period:8},
+      {number:61, symbol:'Pm', name:'Promethium', group:7, period:8},
+      {number:62, symbol:'Sm', name:'Samarium', group:8, period:8},
+      {number:63, symbol:'Eu', name:'Europium', group:9, period:8},
+      {number:64, symbol:'Gd', name:'Gadolinium', group:10, period:8},
+      {number:65, symbol:'Tb', name:'Terbium', group:11, period:8},
+      {number:66, symbol:'Dy', name:'Dysprosium', group:12, period:8},
+      {number:67, symbol:'Ho', name:'Holmium', group:13, period:8},
+      {number:68, symbol:'Er', name:'Erbium', group:14, period:8},
+      {number:69, symbol:'Tm', name:'Thulium', group:15, period:8},
+      {number:70, symbol:'Yb', name:'Ytterbium', group:16, period:8},
+      {number:71, symbol:'Lu', name:'Lutetium', group:17, period:8},
+      {number:72, symbol:'Hf', name:'Hafnium', group:4, period:6},
+      {number:73, symbol:'Ta', name:'Tantalum', group:5, period:6},
+      {number:74, symbol:'W', name:'Tungsten', group:6, period:6},
+      {number:75, symbol:'Re', name:'Rhenium', group:7, period:6},
+      {number:76, symbol:'Os', name:'Osmium', group:8, period:6},
+      {number:77, symbol:'Ir', name:'Iridium', group:9, period:6},
+      {number:78, symbol:'Pt', name:'Platinum', group:10, period:6},
+      {number:79, symbol:'Au', name:'Gold', group:11, period:6},
+      {number:80, symbol:'Hg', name:'Mercury', group:12, period:6},
+      {number:81, symbol:'Tl', name:'Thallium', group:13, period:6},
+      {number:82, symbol:'Pb', name:'Lead', group:14, period:6},
+      {number:83, symbol:'Bi', name:'Bismuth', group:15, period:6},
+      {number:84, symbol:'Po', name:'Polonium', group:16, period:6},
+      {number:85, symbol:'At', name:'Astatine', group:17, period:6},
+      {number:86, symbol:'Rn', name:'Radon', group:18, period:6},
+      {number:87, symbol:'Fr', name:'Francium', group:1, period:7},
+      {number:88, symbol:'Ra', name:'Radium', group:2, period:7},
+      {number:89, symbol:'Ac', name:'Actinium', group:3, period:7},
+      {number:90, symbol:'Th', name:'Thorium', group:4, period:9},
+      {number:91, symbol:'Pa', name:'Protactinium', group:5, period:9},
+      {number:92, symbol:'U', name:'Uranium', group:6, period:9},
+      {number:93, symbol:'Np', name:'Neptunium', group:7, period:9},
+      {number:94, symbol:'Pu', name:'Plutonium', group:8, period:9},
+      {number:95, symbol:'Am', name:'Americium', group:9, period:9},
+      {number:96, symbol:'Cm', name:'Curium', group:10, period:9},
+      {number:97, symbol:'Bk', name:'Berkelium', group:11, period:9},
+      {number:98, symbol:'Cf', name:'Californium', group:12, period:9},
+      {number:99, symbol:'Es', name:'Einsteinium', group:13, period:9},
+      {number:100, symbol:'Fm', name:'Fermium', group:14, period:9},
+      {number:101, symbol:'Md', name:'Mendelevium', group:15, period:9},
+      {number:102, symbol:'No', name:'Nobelium', group:16, period:9},
+      {number:103, symbol:'Lr', name:'Lawrencium', group:17, period:9},
+      {number:104, symbol:'Rf', name:'Rutherfordium', group:4, period:7},
+      {number:105, symbol:'Db', name:'Dubnium', group:5, period:7},
+      {number:106, symbol:'Sg', name:'Seaborgium', group:6, period:7},
+      {number:107, symbol:'Bh', name:'Bohrium', group:7, period:7},
+      {number:108, symbol:'Hs', name:'Hassium', group:8, period:7},
+      {number:109, symbol:'Mt', name:'Meitnerium', group:9, period:7},
+      {number:110, symbol:'Ds', name:'Darmstadtium', group:10, period:7},
+      {number:111, symbol:'Rg', name:'Roentgenium', group:11, period:7},
+      {number:112, symbol:'Cn', name:'Copernicium', group:12, period:7},
+      {number:113, symbol:'Nh', name:'Nihonium', group:13, period:7},
+      {number:114, symbol:'Fl', name:'Flerovium', group:14, period:7},
+      {number:115, symbol:'Mc', name:'Moscovium', group:15, period:7},
+      {number:116, symbol:'Lv', name:'Livermorium', group:16, period:7},
+      {number:117, symbol:'Ts', name:'Tennessine', group:17, period:7},
+      {number:118, symbol:'Og', name:'Oganesson', group:18, period:7}
+    ];
+
+    // Build a 2D array for main table (periods 1-7, groups 1-18)
+    const mainTable = Array.from({length: 7}, () => Array(18).fill(null));
+    elements.forEach(e => {
+      if (e.period <= 7 && e.group <= 18) {
+        mainTable[e.period-1][e.group-1] = e;
+      }
+    });
+
+    // Lanthanides and Actinides (period 8 and 9)
+    const lanthanides = elements.filter(e => e.period === 8);
+    const actinides = elements.filter(e => e.period === 9);
+
+    const table = document.getElementById('table');
+
+    function getInfoHtml(element) {
+      return `
+        <div class="info-pop">
+          <h2 class="text-base font-bold mb-1">${element.name} <span class="text-gray-500">(${element.symbol})</span></h2>
+          <p class="text-xs"><strong>Atomic Number:</strong> ${element.number}</p>
+          <p class="text-xs"><strong>Group:</strong> ${element.group}</p>
+          <p class="text-xs"><strong>Period:</strong> ${element.period <= 7 ? element.period : (element.period === 8 ? 'Lanthanide' : 'Actinide')}</p>
+        </div>
+      `;
+    }
+
+    // Render main table
+    for (let period = 0; period < 7; period++) {
+      for (let group = 0; group < 18; group++) {
+        const el = mainTable[period][group];
+        const slot = document.createElement('div');
+        if (el) {
+          slot.className = 'element relative';
+          slot.innerHTML = `<span class="number">${el.number}</span>
+            <span class="symbol">${el.symbol}</span>
+            <span class="name">${el.name}</span>
+            ${getInfoHtml(el)}`;
+          slot.title = el.name;
+        } else {
+          slot.className = 'empty';
+        }
+        table.appendChild(slot);
+      }
+    }
+
+    // Spacer row
+    for (let i = 0; i < 18; i++) {
+      const spacer = document.createElement('div');
+      spacer.className = 'empty';
+      table.appendChild(spacer);
+    }
+
+    // Lanthanides row
+    for (let i = 0; i < 18; i++) {
+      const el = lanthanides.find(e => e.group === i+1);
+      const slot = document.createElement('div');
+      if (el) {
+        slot.className = 'element relative';
+        slot.innerHTML = `<span class="number">${el.number}</span>
+          <span class="symbol">${el.symbol}</span>
+          <span class="name">${el.name}</span>
+          ${getInfoHtml(el)}`;
+        slot.title = el.name;
+      } else {
+        slot.className = 'empty';
+      }
+      table.appendChild(slot);
+    }
+
+    // Actinides row
+    for (let i = 0; i < 18; i++) {
+      const el = actinides.find(e => e.group === i+1);
+      const slot = document.createElement('div');
+      if (el) {
+        slot.className = 'element relative';
+        slot.innerHTML = `<span class="number">${el.number}</span>
+          <span class="symbol">${el.symbol}</span>
+          <span class="name">${el.name}</span>
+          ${getInfoHtml(el)}`;
+        slot.title = el.name;
+      } else {
+        slot.className = 'empty';
+      }
+      table.appendChild(slot);
+    }
+  </script>
+</body>
+</html>

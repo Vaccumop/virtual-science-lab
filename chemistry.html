@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chemistry Experiments</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #f3e5f5, #e0f7fa);
+      min-height: 100vh;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      max-width: 1000px;
+      margin: auto;
+    }
+    .card {
+      background: white;
+      padding: 1rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.2s, background 0.2s;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      background-color: #fce4ec;
+    }
+    .card img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      margin-bottom: 1rem;
+    }
+    .card h3 {
+      margin: 0;
+      font-size: 1.1rem;
+      color: #00695c;
+    }
+    nav {
+      width: 100%;
+      background: rgba(255,255,255,0.8);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 10;
+    }
+    nav a {
+      text-decoration: none;
+      color: #7c3aed;
+      font-weight: 500;
+      margin: 0 0.5rem;
+      transition: color 0.2s;
+    }
+    nav a.active, nav a.underline {
+      color: #00695c;
+      text-decoration: underline;
+      font-weight: 700;
+    }
+    nav a:hover {
+      color: #4a148c;
+    }
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding-top: 6rem;
+      padding-bottom: 2rem;
+    }
+    h1 {
+      color: #4a148c;
+      margin-bottom: 2rem;
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      text-shadow: 0 2px 8px #e0e0e0;
+    }
+    .divider {
+      height: 4px;
+      width: 80px;
+      background: #80deea;
+      margin: 0 auto 2rem auto;
+      border-radius: 2px;
+    }
+    footer {
+      width: 100%;
+      background: rgba(255,255,255,0.8);
+      text-align: center;
+      padding: 1rem 0;
+      color: #888;
+      font-size: 0.95rem;
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav>
+    <a href="/index.html" class="text-2xl font-bold" style="color:#7c3aed;">Virtual Science Lab</a>
+    <div>
+      <a href="/index.html">Home</a>
+      <a href="/chemistry.html" class="active underline">Chemistry</a>
+      <!-- Add more nav links as needed -->
+    </div>
+  </nav>
+
+  <div class="main-content">
+    <h1>🧪 Chemistry Virtual Experiments</h1>
+    <div class="divider"></div>
+    <div class="grid">
+      <a href="chemistry/acid-base-titration.html" class="card">
+        <img src="assets/icons/titration.png" alt="Acid-Base Titration" />
+        <h3>Acid-Base Titration</h3>
+      </a>
+      <a href="chemistry/balancing.html" class="card">
+        <img src="assets/icons/balance.png" alt="Balancing Equations" />
+        <h3>Balancing Equations</h3>
+      </a>
+      <a href="chemistry/states.html" class="card">
+        <img src="assets/icons/states.png" alt="States of Matter" />
+        <h3>States of Matter</h3>
+      </a>
+      <a href="chemistry/limiting.html" class="card">
+        <img src="assets/icons/limiting.png" alt="Limiting Reactants" />
+        <h3>Limiting Reactants</h3>
+      </a>
+      <a href="chemistry/periodic-table.html" class="card">
+        <img src="assets/icons/ptable.png" alt="Periodic Table" />
+        <h3>Periodic Table Explorer</h3>
+      </a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 Virtual Science Lab. All rights reserved.
+  </footer>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Limiting Reactants Simulator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .molecule {
+      font-size: 2rem;
+      animation: pop 0.5s ease;
+    }
+    @keyframes pop {
+      from {
+        transform: scale(0.5);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-purple-100 via-white to-pink-100 min-h-screen flex flex-col font-sans">
+
+  <!-- Navigation Bar -->
+  <nav class="w-full bg-white/80 shadow-md py-4 px-8 flex justify-between items-center fixed top-0 left-0 z-10">
+    <a href="/index.html" class="text-2xl font-bold text-purple-700 hover:text-purple-900 transition">Virtual Science Lab</a>
+    <div>
+      <a href="/index.html" class="text-purple-600 hover:text-purple-900 font-medium px-4">Home</a>
+      <a href="/chemistry/limiting.html" class="text-pink-900 font-semibold px-4 underline">Limiting Reactants</a>
+      <!-- Add more nav links as needed -->
+    </div>
+  </nav>
+
+  <div class="flex-1 flex flex-col items-center justify-center pt-24 pb-8">
+    <header class="w-full max-w-3xl mx-auto mb-6">
+      <h1 class="text-4xl font-extrabold text-center text-pink-900 drop-shadow mb-2">
+        ⚗️ Limiting Reactants Simulator
+      </h1>
+      <div class="h-1 w-24 bg-pink-400 mx-auto rounded"></div>
+    </header>
+
+    <main class="w-full max-w-xl bg-white/95 rounded-3xl shadow-2xl p-8 flex flex-col items-center border border-pink-100">
+      <form class="w-full max-w-md flex flex-col gap-4" onsubmit="simulateReaction(); return false;">
+        <div>
+          <label for="reactantA" class="font-semibold text-purple-800">Moles of Reactant A (🟢):</label>
+          <input type="number" id="reactantA" placeholder="e.g., 3" min="0" step="0.1"
+            class="w-full mt-1 border-2 border-purple-200 rounded-lg px-3 py-2 focus:outline-none focus:border-pink-400 transition"/>
+        </div>
+        <div>
+          <label for="reactantB" class="font-semibold text-purple-800">Moles of Reactant B (🔵):</label>
+          <input type="number" id="reactantB" placeholder="e.g., 2" min="0" step="0.1"
+            class="w-full mt-1 border-2 border-purple-200 rounded-lg px-3 py-2 focus:outline-none focus:border-pink-400 transition"/>
+        </div>
+        <button type="submit"
+          class="w-full bg-gradient-to-r from-purple-500 to-pink-400 hover:from-purple-700 hover:to-pink-600 text-white font-bold py-2 px-6 rounded-lg shadow transition">
+          Simulate Reaction
+        </button>
+      </form>
+
+      <div class="result text-pink-900 font-semibold text-lg mt-6 text-center" id="result"></div>
+      <div class="reaction-visual flex flex-wrap gap-2 justify-center mt-6" id="visual"></div>
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer class="w-full bg-white/80 text-center py-4 text-gray-500 text-sm shadow-inner mt-8">
+    &copy; 2025 Virtual Science Lab. All rights reserved.
+  </footer>
+
+  <script>
+    function simulateReaction() {
+      const a = parseFloat(document.getElementById('reactantA').value);
+      const b = parseFloat(document.getElementById('reactantB').value);
+      const result = document.getElementById('result');
+      const visual = document.getElementById('visual');
+
+      visual.innerHTML = '';
+      result.textContent = '';
+
+      if (isNaN(a) || isNaN(b) || a <= 0 || b <= 0) {
+        result.textContent = '⚠️ Please enter valid moles for both reactants.';
+        return;
+      }
+
+      let limiting, excess, productCount;
+
+      if (a < b) {
+        limiting = 'Reactant A (🟢)';
+        excess = 'Reactant B (🔵)';
+        productCount = Math.floor(a);
+      } else if (b < a) {
+        limiting = 'Reactant B (🔵)';
+        excess = 'Reactant A (🟢)';
+        productCount = Math.floor(b);
+      } else {
+        limiting = 'Both reactants are perfectly balanced';
+        productCount = Math.floor(a);
+      }
+
+      result.textContent = limiting.includes('balanced')
+        ? '✅ Perfectly balanced. All molecules react with no excess.'
+        : `⛔ ${limiting} is the limiting reactant. ${excess} is in excess.`;
+
+      // Show product reactions
+      for (let i = 0; i < productCount; i++) {
+        const mol = document.createElement('div');
+        mol.className = 'molecule';
+        mol.textContent = '🟢 + 🔵 → 🟣';
+        visual.appendChild(mol);
+      }
+    }
+  </script>
+</body>
+</html>

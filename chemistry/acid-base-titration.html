@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Acid-Base Titration Simulator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-100 via-white to-pink-100 min-h-screen flex flex-col font-sans">
+
+  <!-- Navigation Bar -->
+  <nav class="w-full bg-white/80 shadow-md py-4 px-8 flex justify-between items-center fixed top-0 left-0 z-10">
+    <a href="/index.html" class="text-2xl font-bold text-blue-700 hover:text-blue-900 transition">Virtual Science Lab</a>
+    <div>
+      <a href="/index.html" class="text-blue-600 hover:text-blue-900 font-medium px-4">Home</a>
+      <a href="/chemistry/acid_base_titration.html" class="text-pink-900 font-semibold px-4 underline">Acid-Base Titration</a>
+      <!-- Add more nav links as needed -->
+    </div>
+  </nav>
+
+  <div class="flex-1 flex flex-col items-center justify-center pt-24 pb-8">
+    <header class="w-full max-w-3xl mx-auto mb-6">
+      <h1 class="text-4xl font-extrabold text-center text-pink-900 drop-shadow mb-2">
+        Acid-Base Titration Simulator
+      </h1>
+      <div class="h-1 w-24 bg-pink-400 mx-auto rounded"></div>
+    </header>
+
+    <main class="w-full max-w-5xl bg-white/95 rounded-3xl shadow-2xl p-8 flex flex-col md:flex-row gap-8 items-start border border-pink-100">
+      <!-- Simulation and controls -->
+      <div>
+        <div id="simulation" class="bg-white shadow-lg rounded-lg p-4 mb-4"></div>
+        <div class="flex flex-col gap-2 mb-2">
+          <div class="flex gap-2 items-center">
+            <label for="acidSelect" class="text-md font-medium text-gray-700">Acid:</label>
+            <select id="acidSelect" class="border rounded px-2 py-1">
+              <option value="HCl">HCl (Strong)</option>
+              <option value="CH3COOH">CH₃COOH (Weak)</option>
+            </select>
+            <label for="baseSelect" class="text-md font-medium text-gray-700 ml-4">Base:</label>
+            <select id="baseSelect" class="border rounded px-2 py-1">
+              <option value="NaOH">NaOH (Strong)</option>
+              <option value="NH4OH">NH₄OH (Weak)</option>
+            </select>
+          </div>
+          <label class="text-md font-medium text-gray-700">
+            Add Base (in mL):
+          </label>
+          <input type="range" id="volumeSlider" min="0" max="100" value="0" class="w-80 accent-pink-500">
+          <p class="text-gray-700 font-medium">Volume Added: <span id="volumeDisplay">0</span> mL</p>
+        </div>
+        <p class="mt-2 text-gray-600 max-w-xl text-center">
+          As you add the base to the acid, the solution changes color. When the pink color appears, neutralization is complete (simulating phenolphthalein indicator).
+        </p>
+      </div>
+      <!-- pH Graph -->
+      <div class="w-full md:w-[400px]">
+        <canvas id="phGraph" width="400" height="300" class="bg-white rounded-lg shadow"></canvas>
+        <div class="text-center text-gray-700 mt-2">pH vs Volume Added</div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Endpoint Popup -->
+  <div id="endpointPopup" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-xl shadow-2xl p-8 flex flex-col items-center">
+      <div class="text-3xl text-pink-600 mb-2">🎉 Endpoint Reached!</div>
+      <div class="text-lg text-gray-700 mb-4">The solution has turned pink. Neutralization is complete.</div>
+      <button onclick="closePopup()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded">OK</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="w-full bg-white/80 text-center py-4 text-gray-500 text-sm shadow-inner mt-8">
+    &copy; 2025 Virtual Science Lab. All rights reserved.
+  </footer>
+
+  <script>
+    // Acid/Base properties (simple strong/weak, for demo)
+    const acidProps = {
+      HCl: { strong: true, conc: 0.1 },
+      CH3COOH: { strong: false, conc: 0.1 }
+    };
+    const baseProps = {
+      NaOH: { strong: true, conc: 0.1 },
+      NH4OH: { strong: false, conc: 0.1 }
+    };
+
+    let baseVolume = 0;
+    let endpoint = 50; // Default endpoint in mL
+    let acid = "HCl";
+    let base = "NaOH";
+    let dripY = 0;
+    let dripActive = false;
+    let phData = [];
+
+    function calcEndpoint() {
+      // For simplicity, endpoint = (acid conc * acid vol) / (base conc)
+      // Assume acid vol = 50 mL, base conc = acid conc
+      return 50;
+    }
+
+    function calcPH(volume) {
+      // Simple strong/strong, strong/weak, weak/strong, weak/weak logic
+      // Assume acid vol = 50 mL, acid conc = 0.1 M, base conc = 0.1 M
+      const acidObj = acidProps[acid];
+      const baseObj = baseProps[base];
+      const Va = 50, Ca = acidObj.conc, Cb = baseObj.conc;
+      const Vb = volume;
+      let n_acid = Ca * Va / 1000;
+      let n_base = Cb * Vb / 1000;
+      let ph = 7;
+
+      if (acidObj.strong && baseObj.strong) {
+        // Strong acid + strong base
+        if (n_base < n_acid) {
+          let [Hplus] = [(n_acid - n_base) / ((Va + Vb) / 1000)];
+          ph = -Math.log10(Hplus);
+        } else if (n_base > n_acid) {
+          let [OHminus] = [(n_base - n_acid) / ((Va + Vb) / 1000)];
+          ph = 14 + Math.log10(OHminus);
+        } else {
+          ph = 7;
+        }
+      } else if (!acidObj.strong && baseObj.strong) {
+        // Weak acid + strong base (approximate, not rigorous)
+        if (n_base < n_acid) {
+          // Buffer region
+          let Ka = 1.8e-5;
+          let n_HA = n_acid - n_base;
+          let n_A = n_base;
+          let ratio = n_A / n_HA;
+          ph = Math.log10(ratio) + 4.75;
+        } else if (n_base > n_acid) {
+          let [OHminus] = [(n_base - n_acid) / ((Va + Vb) / 1000)];
+          ph = 14 + Math.log10(OHminus);
+        } else {
+          ph = 9;
+        }
+      } else if (acidObj.strong && !baseObj.strong) {
+        // Strong acid + weak base (approximate)
+        if (n_base < n_acid) {
+          let [Hplus] = [(n_acid - n_base) / ((Va + Vb) / 1000)];
+          ph = -Math.log10(Hplus);
+        } else if (n_base > n_acid) {
+          let Kb = 1.8e-5;
+          let n_B = n_base - n_acid;
+          let OH = Math.sqrt(Kb * (n_B / ((Va + Vb) / 1000)));
+          ph = 14 + Math.log10(OH);
+        } else {
+          ph = 7;
+        }
+      } else {
+        // Weak acid + weak base (very simplified)
+        ph = 7;
+      }
+      return Math.max(0, Math.min(14, ph));
+    }
+
+    function setup() {
+      let canvas = createCanvas(400, 300);
+      canvas.parent('simulation');
+      phData = [];
+      for (let v = 0; v <= 100; v += 1) {
+        phData.push(calcPH(v));
+      }
+    }
+
+    function draw() {
+      background(255);
+
+      // Beaker
+      fill(220);
+      rect(130, 150, 140, 120, 20);
+
+      // Liquid level (simulate increasing base volume)
+      let heightLevel = map(baseVolume, 0, 100, 0, 110);
+
+      // Color change logic
+      let r = map(baseVolume, 0, endpoint, 0, 255);
+      let g = map(baseVolume, 0, endpoint, 0, 100);
+      let b = map(baseVolume, 0, endpoint, 255, 200);
+
+      if (baseVolume >= endpoint) {
+        fill(255, 105, 180); // Pink color for endpoint
+      } else {
+        fill(r, g, b);
+      }
+
+      rect(130, 270 - heightLevel, 140, heightLevel, 0, 0, 20, 20);
+
+      // Burette
+      stroke(0);
+      strokeWeight(4);
+      line(200, 0, 200, 150);
+
+      // Drip animation
+      if (dripActive && dripY < 150) {
+        fill(100, 180, 255);
+        ellipse(200, dripY, 14, 14);
+        dripY += 8;
+      } else if (dripActive) {
+        dripActive = false;
+        dripY = 0;
+      }
+      // Burette tip
+      fill(180);
+      rect(192, 145, 16, 12, 6);
+    }
+
+    // pH Graph Drawing
+    function drawPHGraph() {
+      const ctx = document.getElementById('phGraph').getContext('2d');
+      ctx.clearRect(0, 0, 400, 300);
+
+      // Axes
+      ctx.strokeStyle = "#888";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(40, 10);
+      ctx.lineTo(40, 270);
+      ctx.lineTo(390, 270);
+      ctx.stroke();
+
+      // Labels
+      ctx.fillStyle = "#444";
+      ctx.font = "14px sans-serif";
+      ctx.fillText("pH", 8, 30);
+      ctx.fillText("Volume (mL)", 320, 290);
+
+      // Y ticks
+      for (let i = 0; i <= 14; i += 2) {
+        let y = 270 - (i / 14) * 260;
+        ctx.fillText(i.toString(), 10, y + 4);
+        ctx.strokeStyle = "#eee";
+        ctx.beginPath();
+        ctx.moveTo(40, y);
+        ctx.lineTo(390, y);
+        ctx.stroke();
+      }
+
+      // X ticks
+      for (let v = 0; v <= 100; v += 20) {
+        let x = 40 + (v / 100) * 350;
+        ctx.fillText(v.toString(), x - 8, 290);
+        ctx.strokeStyle = "#eee";
+        ctx.beginPath();
+        ctx.moveTo(x, 270);
+        ctx.lineTo(x, 10);
+        ctx.stroke();
+      }
+
+      // pH curve
+      ctx.strokeStyle = "#e11d48";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      for (let v = 0; v <= 100; v++) {
+        let x = 40 + (v / 100) * 350;
+        let y = 270 - (phData[v] / 14) * 260;
+        if (v === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      // Current point
+      let x = 40 + (baseVolume / 100) * 350;
+      let y = 270 - (phData[baseVolume] / 14) * 260;
+      ctx.fillStyle = "#2563eb";
+      ctx.beginPath();
+      ctx.arc(x, y, 7, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+
+    // Handle slider
+    document.getElementById("volumeSlider").addEventListener("input", function (e) {
+      let newVolume = parseInt(e.target.value);
+      if (newVolume > baseVolume) {
+        dripActive = true;
+        dripY = 0;
+      }
+      baseVolume = newVolume;
+      document.getElementById("volumeDisplay").textContent = baseVolume;
+      drawPHGraph();
+      if (baseVolume >= endpoint) {
+        showPopup();
+      } else {
+        closePopup();
+      }
+    });
+
+    // Acid/base selection
+    document.getElementById("acidSelect").addEventListener("change", function (e) {
+      acid = e.target.value;
+      endpoint = calcEndpoint();
+      phData = [];
+      for (let v = 0; v <= 100; v += 1) {
+        phData.push(calcPH(v));
+      }
+      drawPHGraph();
+    });
+    document.getElementById("baseSelect").addEventListener("change", function (e) {
+      base = e.target.value;
+      endpoint = calcEndpoint();
+      phData = [];
+      for (let v = 0; v <= 100; v += 1) {
+        phData.push(calcPH(v));
+      }
+      drawPHGraph();
+    });
+
+    // Popup functions
+    function showPopup() {
+      document.getElementById("endpointPopup").classList.remove("hidden");
+    }
+    function closePopup() {
+      document.getElementById("endpointPopup").classList.add("hidden");
+    }
+
+    // Initial graph draw after p5 setup
+    window.setup = setup;
+    window.draw = draw;
+    window.onload = () => {
+      setTimeout(drawPHGraph, 500);
+    };
+  </script>
+
+</body>
+</html>

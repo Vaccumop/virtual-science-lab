@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mendelian Genetics: Punnett Square Simulator</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #ede7f6, #e3f2fd);
+      min-height: 100vh;
+    }
+    nav {
+      width: 100%;
+      background: rgba(255,255,255,0.85);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 10;
+    }
+    nav a {
+      text-decoration: none;
+      color: #4a148c;
+      font-weight: 500;
+      margin: 0 0.5rem;
+      transition: color 0.2s;
+    }
+    nav a.active, nav a.underline {
+      color: #00695c;
+      text-decoration: underline;
+      font-weight: 700;
+    }
+    nav a:hover {
+      color: #1565c0;
+    }
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding-top: 6rem;
+      padding-bottom: 2rem;
+    }
+    h1 {
+      color: #4a148c;
+      margin-bottom: 1.5rem;
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      text-shadow: 0 2px 8px #e0e0e0;
+    }
+    .divider {
+      height: 4px;
+      width: 80px;
+      background: #b39ddb;
+      margin: 0 auto 2rem auto;
+      border-radius: 2px;
+    }
+    .sim-container {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 4px 18px rgba(44, 62, 80, 0.10);
+      padding: 2rem;
+      border: 1px solid #b39ddb;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 900px;
+      width: 100%;
+    }
+    iframe {
+      width: 100%;
+      max-width: 800px;
+      height: 600px;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.12);
+    }
+    .note {
+      margin-top: 1.5rem;
+      color: #4a148c;
+      font-size: 1rem;
+      text-align: center;
+    }
+    footer {
+      width: 100%;
+      background: rgba(255,255,255,0.8);
+      text-align: center;
+      padding: 1rem 0;
+      color: #888;
+      font-size: 0.95rem;
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav>
+    <a href="/index.html" class="text-2xl font-bold" style="color:#4a148c;">Virtual Science Lab</a>
+    <div>
+      <a href="/index.html">Home</a>
+      <a href="/biology/punnett.html" class="active underline">Punnett Square</a>
+      <!-- Add more nav links as needed -->
+    </div>
+  </nav>
+
+  <div class="main-content">
+    <h1>🧬 Mendelian Genetics Simulator</h1>
+    <div class="divider"></div>
+    <div class="sim-container">
+      <iframe src="https://punnettsquare.org/" allowfullscreen></iframe>
+      <div class="note">
+        Choose Monohybrid or Dihybrid crosses, input parent genotypes, and visualize all possible offspring outcomes.
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 Virtual Science Lab. All rights reserved.
+  </footer>
+</body>
+</html>

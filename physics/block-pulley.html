@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Block & Pulley System - PhET Simulation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-green-100 via-white to-blue-100 min-h-screen flex flex-col font-sans">
+
+  <!-- Navigation Bar -->
+  <nav class="w-full bg-white/80 shadow-md py-4 px-8 flex justify-between items-center fixed top-0 left-0 z-10">
+    <a href="/index.html" class="text-2xl font-bold text-blue-700 hover:text-blue-900 transition">Virtual Science Lab</a>
+    <div>
+      <a href="/index.html" class="text-blue-600 hover:text-blue-900 font-medium px-4">Home</a>
+      <a href="/physics/newton's-law.html" class="text-green-900 font-semibold px-4 underline">Newton's Laws</a>
+      <!-- Add more nav links as needed -->
+    </div>
+  </nav>
+
+  <div class="flex-1 flex flex-col items-center justify-center pt-24 pb-8">
+    <header class="w-full max-w-3xl mx-auto mb-6">
+      <h1 class="text-4xl font-extrabold text-center text-green-900 drop-shadow mb-2">
+        Block &amp; Pulley System Simulation
+      </h1>
+      <div class="h-1 w-24 bg-green-400 mx-auto rounded"></div>
+    </header>
+
+    <main class="w-full max-w-4xl bg-white/95 rounded-3xl shadow-2xl p-8 flex flex-col items-center border border-green-100">
+      <div class="w-full flex justify-center">
+        <iframe 
+          src="https://phet.colorado.edu/sims/html/forces-and-motion-basics/latest/forces-and-motion-basics_en.html"
+          width="800" height="600" allowfullscreen
+          class="border-4 border-green-400 rounded-xl shadow-lg w-full max-w-3xl"
+        ></iframe>
+      </div>
+      <p class="mt-4 text-gray-700 text-center text-lg max-w-2xl">
+        Explore Newton's Laws of Motion with this interactive block and pulley simulation. Adjust forces and observe the effects on motion!
+      </p>
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer class="w-full bg-white/80 text-center py-4 text-gray-500 text-sm shadow-inner mt-8">
+    &copy; 2025 Virtual Science Lab. All rights reserved.
+  </footer>
+</body>
+</html>
