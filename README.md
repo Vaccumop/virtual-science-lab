@@ -1,1 +1,1 @@
-# virtual-science-lab
+# virtual sciency laboratory by priyanshu jaiswal
